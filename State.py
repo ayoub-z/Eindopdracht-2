@@ -62,23 +62,25 @@ class State:
 
 	def acceptor(self, state, prompt, valids):
 		''' Acceptor style finite state machine to prompt for user input'''
-		# als de state geen input vereist (eind state, "refunding" state in dit geval)
+		# als de state geen input vereist ("refunding" state in dit geval)
 		if not valids:
-			# dan print de prompt die daarbij hoort en eindig
+			# dan print de prompt die daarbij hoort en returneer een lege string. Want het heeft geen input nodig.
 			print(prompt)
 			return ''
 		else:	
 			# als de state wel input vereist
 			while True:
-				# maak die input lowercase, check of het geldig is en returneer het
 				if state == "choice":
 					resp = input(prompt).lower()
+					# check of de input wel geldig is
 					if resp in valids:
 						if resp == "r" or resp == "d":
 							return resp
+						# check of er voldoende geld is	
 						elif self.get_deposit() - float(self.product[resp])  <= 0:
 							print("Not enough deposited. Please pick something cheaper or (d)eposit more..")
 							print(f"Current deposited amount: € {self.get_deposit()}\n")
+						# check of er voldoende voorraad is	
 						elif int(self.get_inventory()[self.product_list[resp]]) <= 0:
 							print(f"We've run out of {self.product_list[resp]}. We will try to refill it as soon as possible. Maybe pick another option..\n")
 						else:
@@ -93,35 +95,42 @@ class State:
 		self.current_state = self.get_state()[self.next_state]
 
 		while self.input_response != exit_state:
+			# de naam van de state waarin we zitten
 			current_state_name = (list(self.state.keys())[list(self.state.values()).index(self.current_state)])
 
-			# validate the input
+			# valideer de input en check of er genoeg voorraad en of er genoeg geld gestort is voor het product
 			self.input_response = self.acceptor(current_state_name, self.current_state['prompt'], self.current_state['input_response'])
-			# update what the next state will be
+			# update wat de volgende state zal worden
 			self.next_state = self.get_transition()[self.next_state][self.input_response]
 
 			# update deposted amount when money is deposited
 			if self.next_state == "waiting deposit" and current_state_name != "ready" and current_state_name != "choice":
-				# print("Your input: ", self.input_response)
+				# update 'deposit' wanneer geld gestort is
 				self.increase_deposit(self.input_response)
-
 				print("\nCurrent deposited amount: ", self.get_deposit())
 
-			# als een product wordt afgegeven, printen we dat uit
+			# als een product wordt afgegeven, vermindert zowel de deposit als de voorraad
 			elif self.next_state == "dispense":
+				# verminder deposit bedrag na uitgave
 				self.decrease_deposit(self.product[self.input_response])
 				print(f"You ordered: {self.product_list[self.input_response]}.")
 				print(f"\nCurrent deposited amount: € {self.get_deposit()}")
 
+				# update inventory (verlaag voorraad van verkocht product met 1)
 				self.update_inventory(self.product_list[self.input_response])
 				print(f"Remaining amount of {self.product_list[self.input_response]}: {self.get_inventory()[self.product_list[self.input_response]]}")
+
+			# wanneer we geld teruggeven, moet de deposit ook helemaal leeg worden
 			elif self.next_state == "refunding":
+				# check of er wel geld over is in de deposit
 				if self.get_deposit() == 0:
 					print(f"Current deposited amount: € {self.get_deposit()}")
 					print("Nothing to refund..")
 				print(f"\nRefunding: € {self.deposit} ..")
+				# verwijder de deposit
 				self.decrease_deposit(self.deposit)
 				print(f"Current deposited amount: € {self.get_deposit()}")
+
 			# update what our current state is
 			self.current_state = self.get_state()[self.next_state]
 
