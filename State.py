@@ -12,7 +12,7 @@ class State:
 	def add_state(self, state, prompt, input_response):
 		if state in self.state:
 			self.state[state]["prompt"] = prompt
-			self.state[state]["inpinput_responseut"] = input_response
+			self.state[state]["input_response"] = input_response
 		else: 
 			self.state[state] = {}
 			self.state[state]["prompt"] = prompt
