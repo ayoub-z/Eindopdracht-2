@@ -3,14 +3,18 @@
 states = {  'ready':{
                 'prompt' : 'Machine ready: (d)eposit, or (q)uit? ',
                 'responses' : ['d','q']},
+
             'waiting':{
                 'prompt' : 'Machine waiting: (s)elect, or (r)efund? ',
                 'responses' : ['s','r']},
+
             'dispense' : {
                 'prompt' : 'Machine dispensing: please (r)emove product ',
                 'responses' : ['r']},
+
             'refunding' : {
                 'prompt' : 'Refunding money ',
+				
                 'responses' : []},
             'exit' :{}
           }
