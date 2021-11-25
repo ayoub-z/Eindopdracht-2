@@ -1,5 +1,6 @@
 from random import randint
-import time
+import simpy
+
 
 class State:
 	def __init__(self):
@@ -8,6 +9,7 @@ class State:
 		self.current_state = None
 		self.input_response = True
 		self.next_state = None
+
 		self.deposit = 0
 		self.product = {}
 		self.inventory =  {"Coffee": "10", "Mars": "10", "Chips": "10"}
@@ -103,7 +105,6 @@ class State:
 			# update wat de volgende state zal worden
 			self.next_state = self.get_transition()[self.next_state][self.input_response]
 
-			# update deposted amount when money is deposited
 			if self.next_state == "waiting deposit" and current_state_name != "ready" and current_state_name != "choice":
 				# update 'deposit' wanneer geld gestort is
 				self.increase_deposit(self.input_response)
@@ -126,23 +127,10 @@ class State:
 				if self.get_deposit() == 0:
 					print(f"Current deposited amount: € {self.get_deposit()}")
 					print("Nothing to refund..")
-				print(f"\nRefunding: € {self.deposit} ..")
+				print(f"\nRefunding: € {self.deposit}..")
 				# verwijder de deposit
 				self.decrease_deposit(self.deposit)
 				print(f"Current deposited amount: € {self.get_deposit()}")
 
 			# update what our current state is
 			self.current_state = self.get_state()[self.next_state]
-
-
-
-
-
-
-
-
-
-
-
-
-

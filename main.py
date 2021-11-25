@@ -1,4 +1,6 @@
 from State import State
+import simpy
+
 # from StateMachine import StateMachine
 
 if __name__ == "__main__":
@@ -10,7 +12,7 @@ if __name__ == "__main__":
 	state.add_state("ready", "Machine ready: (d)eposit money, or (q)uit? ", "['d','q']")
 	state.add_state("waiting deposit", "Machine waiting: Only these coins/bills are accepted [0.25, 0.5, 1, 2, 5, 10, 20]. Enter (d) when done, (r) to refund or (q)uit ", "['0.25', '0.5', '1', '2', '5', '10', '20', 'd', 'r', 'q']")
 	state.add_state("waiting selection", "Machine waiting: (s)elect a product, or (r)efund? ", "['s','r']")
-	state.add_state("choice", "Which product? (1) Coffee (€ 0.75), (2) Mars (€ 1.25), (3) Chips (€ 1.50), (r)efund or (d)epost ", "['1', '2', '3', 'r', 'd']")
+	state.add_state("choice", "Which product? (1) Coffee (€ 0.75), (2) Mars (€ 1.25), (3) Chips (€ 1.50). Or would you like to (r)efund the remaining amount/ make another (d)epost ", "['1', '2', '3', 'r', 'd']")
 	state.add_state("dispense", "Machine dispensing: would you like to (p)urchase more or (r)eceive change? ", "['p', 'r']")
 	state.add_state("refunding", "", "")
 	state.add_state("exit", "", "")	
@@ -46,6 +48,7 @@ if __name__ == "__main__":
 	state.add_transition("dispense", "p", "choice")	
 	state.add_transition("refunding", "", "ready")		
 
+	# voeg product bedragen toe. Eerste parameter staat voor index, tweede voor bedrag
 	state.add_product("1", "0.75")
 	state.add_product("2", "1.25")
 	state.add_product("3", "1.5")
