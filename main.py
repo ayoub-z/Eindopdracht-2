@@ -25,6 +25,11 @@ if __name__ == "__main__":
 	vending_machine.run(4.0, [mars, red_bull])
 	vending_machine.run(7.0, [mars, twix, red_bull])
 
+	"""
+	Voor meerdere dagen worden een random aantal personen gekozen tussen 0 en 50.
+	Voor elk van deze personen worden een bedrag van 2 tot 10 euro gekozen en hoeveel producten de persoon wil kopen (tussen 1 en 3).
+	Hieronder wordt een simulatie gedraaid van 10 dagen.
+	"""
 	for dag in range(10):
 		persons = random.randrange(50)
 		for i in range(persons):

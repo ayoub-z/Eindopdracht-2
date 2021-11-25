@@ -32,10 +32,16 @@ class VendingMachine:
         self.products.append(product)
 
     def refill_product_stock(self):
+        # Alle producten in de vending machine worden aangevuld.
         for product in self.products:
             product.set_stock(50)
 
     def run(self, deposit, products):
+        """
+        Functie run voegt geld to aan vending machine. Kijkt daarna of een persoon één of meerdere producten kan kopen.
+        Zo ja, dan wordt het product gegeven en -1 bij de stock gedaan. Zo niet, dan wordt dit aangegeven.
+        Als een product niet in stock is wordt dit ook aangegeven. Aan het eind wordt het overige geld gerefund.
+        """
         print("Machine ready, deposit coins")
         self.increase_deposit(deposit)
 
