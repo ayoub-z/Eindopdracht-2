@@ -15,7 +15,7 @@ class State:
 		self.inventory =  {"Coffee": "10", "Mars": "10", "Chips": "10"}
 		self.product_list = {"1": "Coffee", "2": "Mars", "3": "Chips"}	
 
-		self.elapsed_time = 0
+		# self.elapsed_time = 0
 
 	def add_state(self, state, prompt, input_response):
 		# als de state al bestaat, voegen we daar een nieuwe 'promt' en 'input_response' aan toe
@@ -52,14 +52,14 @@ class State:
 	def get_inventory(self):
 		return self.inventory
 
-	def increase_elapsed_time(self, time):
-		self.elapsed_time += time
+	# def increase_elapsed_time(self, time):
+	# 	self.elapsed_time += time
 
-	def reset_elapsed_time(self):
-		self.elapsed_time = 0
+	# def reset_elapsed_time(self):
+	# 	self.elapsed_time = 0
 
-	def get_elapsed_time(self):
-		return self.elapsed_time
+	# def get_elapsed_time(self):
+	# 	return self.elapsed_time
 
 	def add_transition(self, state, input_response, next_state):
 		# als de transitie vanuit deze state al bestaat, voegen we hier een nieuwe 'input_response' en de 'next_state' aan toe
@@ -89,7 +89,7 @@ class State:
 					resp = input(prompt).lower()
 					# check of de input wel geldig is
 					if resp in valids:
-						self.increase_elapsed_time(8)
+						# self.increase_elapsed_time(8)
 						if resp == "r" or resp == "d":
 							return resp
 						# check of er voldoende geld is	
@@ -107,8 +107,8 @@ class State:
 						return resp
 
 
-				
-					
+
+
 	def finite_state_machine(self, initial_state, exit_state):		
 		self.next_state = initial_state
 		self.current_state = self.get_state()[self.next_state]
@@ -119,27 +119,27 @@ class State:
 			# valideer de input en check of er genoeg voorraad en of er genoeg geld gestort is voor het product
 			self.input_response = self.acceptor(current_state_name, self.current_state['prompt'], self.current_state['input_response'])
 
-			self.increase_elapsed_time(2)
-			print(f"Elapsed time: {self.get_elapsed_time()}")
+			# self.increase_elapsed_time(2)
+			# print(f"Elapsed time: {self.get_elapsed_time()}")
 
 			# update wat de volgende state zal worden
 			self.next_state = self.get_transition()[self.next_state][self.input_response]
 
-			if self.next_state == "ready":
-				self.reset_elapsed_time()
+			# if self.next_state == "ready":
+				# self.reset_elapsed_time()
 
 			if self.next_state == "waiting deposit" and current_state_name != "ready" and current_state_name != "choice":
 				# update 'deposit' wanneer geld gestort is
 				self.increase_deposit(self.input_response)
 				print("\nCurrent deposited amount: ", self.get_deposit())
-				self.increase_elapsed_time(5)
+				# self.increase_elapsed_time(5)
 			# als een product wordt afgegeven, vermindert zowel de deposit als de voorraad
 			elif self.next_state == "dispense":
 				# verminder deposit bedrag na uitgave
 				self.decrease_deposit(self.product[self.input_response])
 				print(f"You ordered: {self.product_list[self.input_response]}.")
 				print(f"\nCurrent deposited amount: € {self.get_deposit()}")
-				self.increase_elapsed_time(2)
+				# self.increase_elapsed_time(2)
 
 				# update inventory (verlaag voorraad van verkocht product met 1)
 				self.update_inventory(self.product_list[self.input_response])
@@ -155,7 +155,7 @@ class State:
 				# verwijder de deposit
 				self.decrease_deposit(self.deposit)
 				print(f"Current deposited amount: € {self.get_deposit()}")
-				self.increase_elapsed_time(1)
+				# self.increase_elapsed_time(1)
 				
 			# update what our current state is
 			self.current_state = self.get_state()[self.next_state]

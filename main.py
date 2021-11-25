@@ -1,57 +1,37 @@
-from State import State
-import simpy
+from VendingMachine import VendingMachine
+from Product import Product
+import random
 
-# from StateMachine import StateMachine
 
 if __name__ == "__main__":
-	state = State()
+	vending_machine = VendingMachine()
 
-	# creating states. 
-	# each state has a prompt (message) and an input (required input)
-	# first parameter is the state, 2nd is the machine promt and 3rd are the possible inputs
-	state.add_state("ready", "Machine ready: (d)eposit money, or (q)uit? ", "['d','q']")
-	state.add_state("waiting deposit", "Machine waiting: Only these coins/bills are accepted [0.25, 0.5, 1, 2, 5, 10, 20]. Enter (d) when done, (r) to refund or (q)uit ", "['0.25', '0.5', '1', '2', '5', '10', '20', 'd', 'r', 'q']")
-	state.add_state("waiting selection", "Machine waiting: (s)elect a product, or (r)efund? ", "['s','r']")
-	state.add_state("choice", "Which product? (1) Coffee (€ 0.75), (2) Mars (€ 1.25), (3) Chips (€ 1.50). Or would you like to (r)efund the remaining amount/ make another (d)epost ", "['1', '2', '3', 'r', 'd']")
-	state.add_state("dispense", "Machine dispensing: would you like to (p)urchase more or (r)eceive change? ", "['p', 'r']")
-	state.add_state("refunding", "", "")
-	state.add_state("exit", "", "")	
+	mars = Product('Mars', 2.0)
+	red_bull = Product('Red Bull', 2.5)
+	twix = Product('Twix', 1.5)
+	cola = Product('Cola', 2.2)
+	chips = Product('Chips', 1.4)
 
+	vending_machine.add_product(mars)
+	vending_machine.add_product(red_bull)
+	vending_machine.add_product(twix)
+	vending_machine.add_product(cola)
+	vending_machine.add_product(chips)
 
-	# adding transitions
-	# each transition links two states with each other, with the input being that link
-	# first parameter is the state, 2nd is the input, and 3rd is the next state after receiving given input
-	state.add_transition("ready", "d", "waiting deposit")	
-	state.add_transition("ready", "q", "exit")	
+	vending_machine.run(3.0, [mars])
+	vending_machine.run(4.0, [mars])
+	vending_machine.run(10.0, [mars, twix, red_bull])
+	vending_machine.run(5.0, [mars, twix, red_bull])
+	vending_machine.run(4.0, [mars, red_bull])
+	vending_machine.run(7.0, [mars, twix, red_bull])
 
-	state.add_transition("waiting deposit", "0.25", "waiting deposit")
-	state.add_transition("waiting deposit",  "0.5", "waiting deposit")
-	state.add_transition("waiting deposit",    "1", "waiting deposit")
-	state.add_transition("waiting deposit",    "2", "waiting deposit")
-	state.add_transition("waiting deposit",    "5", "waiting deposit")
-	state.add_transition("waiting deposit",   "10", "waiting deposit")
-	state.add_transition("waiting deposit",   "20", "waiting deposit")
-	state.add_transition("waiting deposit",   "d",  "waiting selection")
-	state.add_transition("waiting deposit",   "r",  "refunding")
-	state.add_transition("waiting deposit",   "q",  "refunding")
+	for dag in range(10):
+		persons = random.randrange(50)
+		for i in range(persons):
+			money = random.randrange(20, 100) / 10
+			product_rand = random.randrange(1, 4)
+			rand_products = random.sample(vending_machine.products, product_rand)
 
-	state.add_transition("waiting selection", "s", "choice")	
-	state.add_transition("waiting selection", "r", "refunding")	
+			vending_machine.run(money, rand_products)
 
-	state.add_transition("choice", "1", "dispense")	
-	state.add_transition("choice", "2", "dispense")
-	state.add_transition("choice", "3", "dispense")	
-	state.add_transition("choice", "r", "refunding")	
-	state.add_transition("choice", "d", "waiting deposit")
-
-	state.add_transition("dispense", "r", "refunding")	
-	state.add_transition("dispense", "p", "choice")	
-	state.add_transition("refunding", "", "ready")		
-
-	# voeg product bedragen toe. Eerste parameter staat voor index, tweede voor bedrag
-	state.add_product("1", "0.75")
-	state.add_product("2", "1.25")
-	state.add_product("3", "1.5")
-
-	# initialiseer de fsm
-	state.finite_state_machine('ready','q')
+		vending_machine.refill_product_stock()
