@@ -17,10 +17,10 @@ class VendingMachine:
         return self.deposit
 
     def increase_deposit(self, amount):
-        self.deposit += float(amount)
+        self.deposit += amount
 
     def decrease_deposit(self, amount):
-        self.deposit -= float(amount)
+        self.deposit -= amount
 
     def refund_deposit(self):
         self.deposit = 0
@@ -31,13 +31,17 @@ class VendingMachine:
     def add_product(self, product):
         self.products.append(product)
 
+    def refill_product_stock(self):
+        for product in self.products:
+            product.set_stock(50)
+
     def run(self, deposit, products):
         print("Machine ready, deposit coins")
         self.increase_deposit(deposit)
 
         for product in products:
             if product.get_price() <= self.deposit:
-                print(f"Coins inserted {self.deposit} euro")
+                print(f"Coins inserted {round(self.deposit, 1)} euro")
                 self.change_ready_state()
                 if product.get_stock() > 0:
                     product.decrease_stock()
@@ -52,5 +56,5 @@ class VendingMachine:
                 print(f"Not enough money for {product.get_name()}")
                 break
 
-        print(f"Refunding {self.deposit} euro\n")
+        print(f"Refunding {round(self.deposit, 1)} euro\n")
         self.refund_deposit()

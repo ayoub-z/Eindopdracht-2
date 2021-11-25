@@ -1,8 +1,8 @@
 class Product:
-    def __init__(self, name, price, stock):
+    def __init__(self, name, price):
         self.name = name
         self.price = price
-        self.stock = stock
+        self.stock = 50
 
     def get_name(self):
         return self.name
@@ -16,5 +16,5 @@ class Product:
     def decrease_stock(self):
         self.stock -= 1
 
-    def add_stock(self, number):
-        self.stock += number
+    def set_stock(self, number):
+        self.stock = number
