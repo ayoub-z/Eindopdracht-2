@@ -1,13 +1,18 @@
 # Eindopdracht 2: Toepassingsopdracht DES
 
 We hebben een vending machine gesimulieert waarbij een que mensen tegelijkertijd naartoe gaan in 1 dag. <br/>
-Het aantal mensen is random is tussen de 0 en 50 personen. <br/>
-Iedere persoon komt met een bepaald bedrag (tussen €2 en €10) en een aantal producten dat hij/zij wilt (tussen 1 en 3).<br/>
+Het aantal mensen is random tussen de 0 en 50 personen iedere dag.<br/>
+Iedere persoon komt met een bepaald bedrag (tussen €2 en €10) en met een keuze van het aantal producten dat hij/zij wilt (tussen 1 en 3).<br/>
 
-Aan het begin kun je kiezen voor het aantal dagen dat gesimuleert wordt en de vending machine volgt dan deze stappen:
-  - Stap 1: Er komen munten binnen
-  - Stap 2: Producten worden gekocht
-  - Stap 3: Als het bedrag voldoende is, worden de producten afgegeven.
+Aan het begin geef je een input mee van het aantal dagen dat gesimuleert wordt. 
+De vending machine volgt dan deze stappen:
+  - Stap 1: Er komt een deposit binnen en dit wordt bijgehouden.
+  - Stap 2: Producten worden gekozen. Als de deposit voldoende is, worden de producten afgegeven.
+  - Stap 3: De deposit verlaagt met het respectievelijk bedrag.
+  - Stap 4: Returneer de change als deze er is.
+
+De voorraad van ieder product is 50 en na iedere aankoop verlaagt de voorraad van dat product met 1.
+Aan het eind van de gesimuleerde dag wordt de voorraad helemaal bijgevuld door een medewerker.
 
 
 ## **DES design**: 
